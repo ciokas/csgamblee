@@ -1,207 +1,146 @@
-/* =================== GLOBAL =================== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  font-family: 'Inter', sans-serif;
-  background: radial-gradient(circle at top, #0b1220, #020617);
-  color: #e5e7eb;
+  margin: 0;
+  background: #0f172a;
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
-/* =================== TOPBAR =================== */
 .topbar {
-  height: 64px;
-  background: rgba(2,6,23,0.9);
   display: flex;
-  align-items: center;
-  padding: 0 24px;
   justify-content: space-between;
-  border-bottom: 1px solid #111827;
+  padding: 15px 25px;
+  background: #020617;
+  align-items: center;
 }
 
 .logo {
-  font-weight: 800;
-  font-size: 22px;
-  color: #22c55e;
+  font-weight: bold;
+  font-size: 20px;
 }
 
-nav button {
-  background: none;
-  border: none;
-  color: #9ca3af;
-  margin: 0 8px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-nav button:hover {
-  color: #22c55e;
+.nav button {
+  margin: 0 5px;
 }
 
 .balance {
-  font-weight: 600;
   color: #22c55e;
 }
 
-/* =================== MAIN SECTIONS =================== */
-main {
-  padding: 32px;
+.section {
+  padding: 25px;
 }
 
-.section {
+.hidden {
   display: none;
 }
 
-.section.active {
-  display: block;
-}
-
-/* =================== CASE GRID =================== */
 .case-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 24px;
-  margin-top: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
 }
 
 .case-card {
-  background: linear-gradient(145deg, #020617, #0f172a);
-  border-radius: 18px;
-  padding: 20px;
+  background: #020617;
+  padding: 15px;
   text-align: center;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 0 rgba(34,197,94,0);
-}
-
-.case-card:hover {
-  transform: translateY(-6px) scale(1.04);
-  box-shadow: 0 0 40px rgba(34,197,94,0.35);
 }
 
 .case-card img {
   width: 100px;
-  margin-bottom: 12px;
 }
 
-.case-card h4 {
-  margin: 6px 0;
-}
-
-.case-price {
-  color: #22c55e;
-  font-weight: 600;
-}
-
-/* =================== CASE MODAL =================== */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(2,6,23,0.85);
+  background: rgba(0,0,0,.7);
   display: none;
-  align-items: center;
   justify-content: center;
-  z-index: 100;
-}
-
-.modal.active {
-  display: flex;
+  align-items: center;
 }
 
 .modal-box {
-  width: 600px;
   background: #020617;
-  border-radius: 20px;
-  padding: 24px;
+  padding: 20px;
+  width: 420px;
   text-align: center;
 }
 
-.modal-box h3 {
-  margin-bottom: 20px;
-}
-
-/* =================== SPINNER / STRIP =================== */
 .spinner {
   position: relative;
   overflow: hidden;
-  margin: 20px 0;
   height: 120px;
-  border-radius: 16px;
-  background: #020617;
+  margin: 15px 0;
 }
 
 #caseStrip {
   display: flex;
-  gap: 10px;
-  transition: transform 3.2s cubic-bezier(0.15,0.8,0.2,1);
 }
 
 .caseItem {
   width: 100px;
+  margin: 0 5px;
   background: #020617;
-  border-radius: 14px;
-  padding: 10px;
-  font-size: 11px;
-  text-align: center;
-}
-
-.caseItem img {
-  width: 64px;
 }
 
 .indicator {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%;
   width: 2px;
-  background: #22c55e;
+  background: red;
+  left: 50%;
 }
 
-/* =================== RESULT =================== */
-.result {
-  margin-top: 20px;
+.inventory {
+  padding: 25px;
 }
 
-.result img {
-  width: 120px;
-  display: none;
+#inventoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
 }
 
-/* =================== RARITY =================== */
-.common { border-bottom: 3px solid #9ca3af; }
-.rare { border-bottom: 3px solid #3b82f6; box-shadow: 0 0 15px #3b82f6; }
-.epic { border-bottom: 3px solid #a855f7; box-shadow: 0 0 20px #a855f7; }
-.legendary {
-  border-bottom: 3px solid #facc15;
-  box-shadow: 0 0 35px #facc15;
-  animation: glow 1.5s infinite alternate;
+.inv-item {
+  background: #020617;
+  padding: 10px;
+  text-align: center;
 }
 
-/* =================== GLOW ANIMATION =================== */
-@keyframes glow {
-  from { box-shadow: 0 0 15px #facc15; }
-  to { box-shadow: 0 0 35px #fde047; }
+.inv-item img {
+  width: 80px;
 }
 
-/* =================== BUTTON =================== */
-#openCaseBtn {
-  padding: 10px 20px;
-  font-size: 16px;
-  background: #22c55e;
-  color: #020617;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: 0.2s;
+.roulette {
+  position: relative;
+  overflow: hidden;
+  height: 80px;
+  background: #020617;
+  margin: 20px 0;
 }
 
-#openCaseBtn:hover {
-  background: #16a34a;
+#rouletteWheel {
+  display: flex;
+}
+
+.roulette-item {
+  width: 80px;
+  text-align: center;
+  padding: 25px 0;
+}
+
+.red { background: #dc2626; }
+.black { background: #020617; }
+.green { background: #16a34a; }
+
+.roulette-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: yellow;
+  left: 50%;
 }
 
