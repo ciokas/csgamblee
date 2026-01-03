@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CSGamble</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
+<meta charset="UTF-8">
+<title>CSGamble</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    .hidden { display:none; }
-    .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; justify-content:center; align-items:center; background:rgba(0,0,0,0.7); }
-    .modal-box { background:#111; padding:20px; border-radius:10px; text-align:center; max-width:600px; width:90%; }
-    #resultImg { display:none; max-width:100px; margin-top:10px; }
-    .spinner { position: relative; overflow:hidden; height:120px; margin:15px 0; background:#020617; }
-    #caseStrip { display:flex; }
-    .caseItem { width:100px; margin:0 5px; text-align:center; background:#020617; flex-shrink:0; }
-    .indicator { position:absolute; top:0; bottom:0; width:2px; background:red; left:50%; }
-    #rouletteWheel { display:flex; transition:transform 3s cubic-bezier(0.15,0.8,0.2,1); overflow:hidden; }
-    .roulette-item { width:80px; text-align:center; padding:25px 0; color:white; font-weight:bold; }
-    .red { background:#dc2626; }
-    .black { background:#111; }
-    .green { background:#16a34a; }
-    .roulette-indicator { position:absolute; top:0; bottom:0; width:4px; background:yellow; left:50%; }
-    .case-grid { display:flex; flex-wrap:wrap; gap:15px; margin-top:15px; }
-    .case-card { width:120px; background:#111; padding:10px; border-radius:8px; text-align:center; cursor:pointer; transition:0.2s; }
-    .case-card:hover { transform:scale(1.05); }
-    .inventory { margin-top:20px; }
-    #inventoryGrid { display:flex; flex-wrap:wrap; gap:10px; }
-    .inv-item { width:80px; background:#111; padding:5px; border-radius:6px; text-align:center; }
-  </style>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
+
+<style>
+.hidden{display:none}
+.modal{display:none;position:fixed;inset:0;justify-content:center;align-items:center;background:rgba(0,0,0,.8)}
+.modal-box{background:#0b1220;padding:20px;border-radius:12px;width:95%;max-width:900px}
+.spinner{position:relative;overflow:hidden;height:140px;background:#020617;margin:10px 0}
+#caseStrip{display:flex}
+.caseItem{width:110px;text-align:center;margin:0 5px}
+.indicator{position:absolute;top:0;bottom:0;width:3px;background:red;left:50%}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#020617}
+.nav button{margin:0 5px}
+.case-grid{display:flex;gap:15px;flex-wrap:wrap}
+.case-card{background:#020617;padding:10px;width:140px;border-radius:8px;text-align:center;cursor:pointer}
+.inventory{margin-top:20px}
+.inv-item{background:#020617;width:120px;padding:6px;border-radius:6px;text-align:center}
+.sell-btn{background:#dc2626;border:none;color:white;width:100%;cursor:pointer}
+
+.roulette{position:relative;height:100px;overflow:hidden}
+#rouletteWheel{display:flex}
+.roulette-item{width:80px;text-align:center;padding:25px 0;color:white;font-weight:bold}
+.red{background:#dc2626}
+.black{background:#111}
+.green{background:#16a34a}
+.roulette-indicator{position:absolute;top:0;bottom:0;width:4px;background:yellow;left:50%}
+</style>
 </head>
+
 <body>
 
 <div class="topbar">
@@ -42,42 +47,57 @@
 </div>
 
 <section id="cases" class="section">
-  <h2>Cases</h2>
-  <div id="caseGrid" class="case-grid"></div>
+<h2>Cases</h2>
+<div id="caseGrid" class="case-grid"></div>
 </section>
 
 <section id="roulette" class="section hidden">
-  <h2>Roulette</h2>
-  <div class="roulette" style="position:relative; height:100px; overflow:hidden;">
-    <div id="rouletteWheel"></div>
-    <div class="roulette-indicator"></div>
-  </div>
-  <div class="roulette-controls" style="margin-top:15px;">
-    <input type="number" id="betAmount" value="5" min="1" style="width:60px;">
-    <button onclick="placeBet('red')">Red</button>
-    <button onclick="placeBet('black')">Black</button>
-    <button onclick="placeBet('green')">Green</button>
-  </div>
+<h2>Roulette</h2>
+<div class="roulette">
+  <div id="rouletteWheel"></div>
+  <div class="roulette-indicator"></div>
+</div>
+<input type="number" id="betAmount" value="5" min="1">
+<button onclick="placeBet('red')">Red</button>
+<button onclick="placeBet('black')">Black</button>
+<button onclick="placeBet('green')">Green</button>
 </section>
 
 <section id="inventory" class="inventory">
-  <h2>Inventory</h2>
-  <div id="inventoryGrid"></div>
+<h2>Inventory</h2>
+<div id="inventoryGrid"></div>
 </section>
 
+<!-- CASE MODAL -->
 <div id="caseModal" class="modal">
-  <div class="modal-box">
-    <h3 id="caseTitle"></h3>
-    <div class="spinner">
-      <div id="caseStrip"></div>
-      <div class="indicator"></div>
-    </div>
-    <button id="openCaseBtn">Open Case</button>
-    <div id="result">
-      <p id="resultText"></p>
-      <img id="resultImg">
-    </div>
-  </div>
+<div class="modal-box">
+
+<button onclick="closeCase()" style="float:right">✖</button>
+<h3 id="caseTitle"></h3>
+
+<label>Cases:
+<select id="caseCount">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
+</label>
+
+<label style="margin-left:10px">
+<input type="checkbox" id="instaSpin"> Insta Spin
+</label>
+
+<div class="spinner">
+  <div id="caseStrip"></div>
+  <div class="indicator"></div>
+</div>
+
+<button id="openCaseBtn">Open</button>
+
+<div id="result"></div>
+
+</div>
 </div>
 
 <script src="js/main.js"></script>
