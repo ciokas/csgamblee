@@ -9,71 +9,67 @@
 
 <h1>🎰 CS2 Gamble</h1>
 
-<div class="case">
-    <img src="images/starter_case.png" width="150">
+<!-- CASE OPENING -->
+<section>
+    <h2>📦 Case Opening</h2>
+    <img src="images/starter_case.png" width="140">
+    <br>
     <button onclick="openCase()">Atidaryti Case</button>
-</div>
+    <div id="caseResult"></div>
+</section>
 
-<h2>🎁 Laimėtas Skinas</h2>
-<div id="result"></div>
-
-<h2>🎒 Inventory</h2>
-<div id="inventory"></div>
-
-<hr>
-
-<h2>🎡 Roulette</h2>
-<button onclick="playRoulette()">Sukti Roulette</button>
-<div id="rouletteResult"></div>
-    <hr>
-
-<h2>💣 Mines</h2>
-
-<label>Bombų kiekis:</label>
-<select id="bombCount">
-    <option value="3">3</option>
-    <option value="5">5</option>
-    <option value="10">10</option>
-</select>
-
-<button onclick="startMines()">Start</button>
-<button onclick="cashoutMines()">Cashout</button>
-
-<p>Multiplier: <span id="multiplier">1.00x</span></p>
-
-<div id="minesGrid" class="grid"></div>
-
-<p id="minesStatus"></p>
-    <hr>
+<!-- INVENTORY -->
+<section>
+    <h2>🎒 Inventory</h2>
+    <div id="inventory"></div>
+</section>
 
 <hr>
 
-<h2>⚔️ Case Battle (Animated)</h2>
+<!-- MINES -->
+<section>
+    <h2>💣 Mines</h2>
 
-<button onclick="startAnimatedBattle()">Pradėti Battle</button>
+    <select id="bombCount">
+        <option value="3">3 Bombos</option>
+        <option value="5">5 Bombos</option>
+        <option value="10">10 Bombų</option>
+    </select>
 
-<div class="battle">
-    <div>
-        <h3>Tu</h3>
-        <div class="roller">
-            <div id="playerRoll" class="roll-track"></div>
+    <button onclick="startMines()">Start</button>
+    <button onclick="cashoutMines()">Cashout</button>
+
+    <p>Multiplier: <span id="multiplier">1.00x</span></p>
+    <div id="minesGrid" class="grid"></div>
+    <p id="minesStatus"></p>
+</section>
+
+<hr>
+
+<!-- CASE BATTLE -->
+<section>
+    <h2>⚔️ Case Battle (Animated)</h2>
+    <button onclick="startAnimatedBattle()">Pradėti Battle</button>
+
+    <div class="battle">
+        <div>
+            <h3>Tu</h3>
+            <div class="roller">
+                <div id="playerRoll" class="roll-track"></div>
+            </div>
+        </div>
+
+        <div>
+            <h3>Bot</h3>
+            <div class="roller">
+                <div id="botRoll" class="roll-track"></div>
+            </div>
         </div>
     </div>
 
-    <div>
-        <h3>Bot</h3>
-        <div class="roller">
-            <div id="botRoll" class="roll-track"></div>
-        </div>
-    </div>
-</div>
-
-<h3 id="battleResult"></h3>
-
-
+    <h3 id="battleResult"></h3>
+</section>
 
 <script src="main.js"></script>
 </body>
 </html>
-
-   
