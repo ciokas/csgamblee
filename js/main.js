@@ -115,6 +115,15 @@ function cashoutMines() {
     document.getElementById("minesStatus").innerText =
         "💰 Cashout: " + multiplier.toFixed(2) + "x";
     revealAll();
+    
 }
+    const skins = [
+    { name: "AK-47 | Redline", img: "images/ak47_redline.png", chance: 30, value: 15 },
+    { name: "AWP | Asiimov", img: "images/awp_asiimov.png", chance: 20, value: 25 },
+    { name: "Desert Eagle | Blaze", img: "images/deagle_blaze.png", chance: 20, value: 20 },
+    { name: "M4A4 | Howl", img: "images/m4a4_howl.png", chance: 15, value: 40 },
+    { name: "Karambit | Doppler", img: "images/karambit_doppler.png", chance: 5, value: 80 }
+];
+
 
 }
