@@ -1,81 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>CSGamble</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/animations.css">
+  <meta charset="UTF-8">
+  <title>CSGamble</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-/* Pagrindinis stilius */
-body { background:#121212; color:white; font-family:sans-serif; margin:0; padding:0; }
-.topbar { display:flex; justify-content:space-between; padding:10px 20px; background:#111; align-items:center; }
-.topbar .nav button { margin-left:10px; }
-.balance { font-weight:bold; }
-.section { padding:15px; }
-.hidden { display:none; }
-.case-grid, #inventoryGrid { display:flex; flex-wrap:wrap; gap:10px; }
-.case-card, .inv-item { background:#111; padding:10px; border-radius:8px; text-align:center; cursor:pointer; transition:0.2s; }
-.case-card:hover { transform:scale(1.05); }
-.modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; }
-.modal-box { background:#111; padding:20px; border-radius:10px; max-width:600px; width:90%; text-align:center; }
-.spinner { position:relative; overflow:hidden; height:120px; margin:10px 0; background:#020617; }
-#caseStrip { display:flex; }
-.caseItem { width:100px; margin:0 5px; text-align:center; flex-shrink:0; }
-.indicator { position:absolute; top:0; bottom:0; width:2px; background:red; left:50%; }
-#resultImg { display:none; max-width:100px; margin-top:10px; }
-#rouletteWheel { display:flex; transition:transform 3s cubic-bezier(0.15,0.8,0.2,1); overflow:hidden; }
-.roulette-item { width:80px; text-align:center; padding:25px 0; font-weight:bold; }
-.red { background:#dc2626; } .black { background:#111; } .green { background:#16a34a; }
-.roulette-indicator { position:absolute; top:0; bottom:0; width:4px; background:yellow; left:50%; }
-</style>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body { background:#020617; color:#fff; font-family:Arial,sans-serif; margin:0; }
+    .hidden { display:none; }
+
+    .topbar {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:12px 20px; background:#020617; border-bottom:1px solid #1e293b;
+    }
+
+    .nav button {
+      margin-right:8px; background:#111827; color:white;
+      border:none; padding:8px 12px; cursor:pointer; border-radius:6px;
+    }
+
+    .balance { font-weight:bold; }
+
+    section { padding:20px; }
+
+    /* CASES */
+    .case-grid { display:flex; gap:15px; flex-wrap:wrap; }
+    .case-card {
+      width:140px; background:#020617; border:1px solid #1e293b;
+      padding:10px; border-radius:8px; text-align:center; cursor:pointer;
+    }
+    .case-card img { width:100px; }
+
+    /* MODAL */
+    .modal {
+      position:fixed; inset:0; background:rgba(0,0,0,0.85);
+      display:flex; justify-content:center; align-items:center;
+    }
+
+    .modal-box {
+      background:#020617; padding:20px; border-radius:12px;
+      width:90%; max-width:900px;
+    }
+
+    /* CASE STRIP */
+    .spinner {
+      position:relative; overflow:hidden; height:130px;
+      background:#020617; border:1px solid #1e293b; margin:15px 0;
+    }
+
+    .caseStrip { display:flex; }
+
+    .caseItem {
+      width:120px; flex-shrink:0; text-align:center;
+    }
+
+    .caseItem img { width:80px; }
+
+    .indicator {
+      position:absolute; top:0; bottom:0; width:3px;
+      background:#facc15; left:50%;
+    }
+
+    /* INVENTORY */
+    #inventoryGrid { display:flex; gap:10px; flex-wrap:wrap; }
+    .inv-item {
+      width:120px; background:#020617; border:1px solid #1e293b;
+      padding:8px; border-radius:8px; text-align:center;
+    }
+
+    /* ROULETTE */
+    .roulette-wrap {
+      position:relative; height:100px; overflow:hidden;
+      border:1px solid #1e293b;
+    }
+
+    #rouletteWheel { display:flex; }
+
+    .roulette-item {
+      width:80px; padding:25px 0;
+      text-align:center; font-weight:bold;
+    }
+
+    .red { background:#dc2626; }
+    .black { background:#020617; }
+    .green { background:#16a34a; }
+
+    .roulette-indicator {
+      position:absolute; top:0; bottom:0;
+      width:4px; background:#facc15; left:50%;
+    }
+
+    button.primary {
+      background:#2563eb; color:white; border:none;
+      padding:10px 14px; border-radius:6px; cursor:pointer;
+    }
+  </style>
 </head>
+
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="logo">CSGamble</div>
+  <div class="logo"><b>CSGamble</b></div>
   <div class="nav">
     <button onclick="showSection('cases')">Cases</button>
+    <button onclick="showSection('battle')">Case Battle</button>
     <button onclick="showSection('roulette')">Roulette</button>
     <button onclick="showSection('inventory')">Inventory</button>
   </div>
-  <div class="balance">Balance: €100.00</div>
+  <div class="balance" id="balanceText">€0.00</div>
 </div>
 
-<section id="cases" class="section"></section>
-<section id="roulette" class="section hidden">
+<!-- CASES -->
+<section id="cases">
+  <h2>Cases</h2>
+  <div id="caseGrid" class="case-grid"></div>
+</section>
+
+<!-- CASE BATTLE -->
+<section id="battle" class="hidden">
+  <h2>Case Battle (vs Bot)</h2>
+  <button class="primary" onclick="startCaseBattle()">Start Battle</button>
+  <div id="battleArea"></div>
+</section>
+
+<!-- ROULETTE -->
+<section id="roulette" class="hidden">
   <h2>Roulette</h2>
-  <div class="roulette" style="position:relative; height:100px; overflow:hidden;">
+
+  <div class="roulette-wrap">
     <div id="rouletteWheel"></div>
     <div class="roulette-indicator"></div>
   </div>
-  <div class="roulette-controls" style="margin-top:15px;">
+
+  <div style="margin-top:15px;">
+    Bet:
     <input type="number" id="betAmount" value="5" min="1" style="width:60px;">
-    <button onclick="placeBet('red')">Red (2x)</button>
-    <button onclick="placeBet('black')">Black (2x)</button>
-    <button onclick="placeBet('green')">Green (14x)</button>
+    <button onclick="betColor('red')">Red (x2)</button>
+    <button onclick="betColor('black')">Black (x2)</button>
+    <button onclick="betColor('green')">Green (x14)</button>
   </div>
 </section>
-<section id="inventory" class="inventory hidden">
+
+<!-- INVENTORY -->
+<section id="inventory" class="hidden">
   <h2>Inventory</h2>
   <div id="inventoryGrid"></div>
 </section>
 
 <!-- CASE MODAL -->
-<div id="caseModal" class="modal">
+<div id="caseModal" class="modal hidden">
   <div class="modal-box">
     <h3 id="caseTitle"></h3>
-    <div class="spinner">
-      <div id="caseStrip"></div>
-      <div class="indicator"></div>
-    </div>
-    <button id="openCaseBtn">Open Case</button>
-    <button id="closeCaseBtn">Exit</button>
-    <div id="result">
-      <p id="resultText"></p>
-      <img id="resultImg">
-    </div>
+
+    <div id="caseSpins"></div>
+
+    <button class="primary" onclick="openSelectedCase()">Open</button>
+    <button onclick="closeCase()">Close</button>
   </div>
 </div>
 
