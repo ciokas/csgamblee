@@ -124,6 +124,38 @@ function cashoutMines() {
     { name: "M4A4 | Howl", img: "images/m4a4_howl.png", chance: 15, value: 40 },
     { name: "Karambit | Doppler", img: "images/karambit_doppler.png", chance: 5, value: 80 }
 ];
+    function startCaseBattle() {
+    const playerSkin = getRandomSkin();
+    const botSkin = getRandomSkin();
+
+    document.getElementById("playerBattle").innerHTML = battleItem(playerSkin);
+    document.getElementById("botBattle").innerHTML = battleItem(botSkin);
+
+    let result = "";
+
+    if (playerSkin.value > botSkin.value) {
+        result = "🏆 TU LAIMĖJAI!";
+        inventory.push(playerSkin);
+    } else if (playerSkin.value < botSkin.value) {
+        result = "🤖 BOTAS LAIMĖJO!";
+    } else {
+        result = "🤝 LYGIŲJŲ!";
+    }
+
+    document.getElementById("battleResult").innerText = result;
+    renderInventory();
+}
+
+function battleItem(skin) {
+    return `
+        <div class="item">
+            <img src="${skin.img}">
+            <p>${skin.name}</p>
+            <small>Value: ${skin.value}</small>
+        </div>
+    `;
+}
+
 
 
 }
