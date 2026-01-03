@@ -25,6 +25,26 @@
 <h2>🎡 Roulette</h2>
 <button onclick="playRoulette()">Sukti Roulette</button>
 <div id="rouletteResult"></div>
+    <hr>
+
+<h2>💣 Mines</h2>
+
+<label>Bombų kiekis:</label>
+<select id="bombCount">
+    <option value="3">3</option>
+    <option value="5">5</option>
+    <option value="10">10</option>
+</select>
+
+<button onclick="startMines()">Start</button>
+<button onclick="cashoutMines()">Cashout</button>
+
+<p>Multiplier: <span id="multiplier">1.00x</span></p>
+
+<div id="minesGrid" class="grid"></div>
+
+<p id="minesStatus"></p>
+
 
 <script src="main.js"></script>
 </body>
