@@ -10,24 +10,27 @@
 
 <style>
 .hidden{display:none}
-.modal{display:none;position:fixed;inset:0;justify-content:center;align-items:center;background:rgba(0,0,0,.8)}
-.modal-box{background:#0b1220;padding:20px;border-radius:12px;width:95%;max-width:900px}
-.spinner{position:relative;overflow:hidden;height:140px;background:#020617;margin:10px 0}
+body{background:#020617;color:white;font-family:Arial}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#020617}
+.case-grid{display:flex;gap:15px;flex-wrap:wrap}
+.case-card{background:#0b1220;padding:10px;width:150px;border-radius:8px;text-align:center;cursor:pointer}
+.case-card:hover{transform:scale(1.05)}
+
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);justify-content:center;align-items:center}
+.modal-box{background:#0b1220;padding:20px;border-radius:12px;width:95%;max-width:1000px}
+
+.spinner{position:relative;overflow:hidden;height:150px;background:#020617;margin:10px 0}
 #caseStrip{display:flex}
-.caseItem{width:110px;text-align:center;margin:0 5px}
+.caseItem{width:120px;margin:0 5px;text-align:center}
 .indicator{position:absolute;top:0;bottom:0;width:3px;background:red;left:50%}
 
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#020617}
-.nav button{margin:0 5px}
-.case-grid{display:flex;gap:15px;flex-wrap:wrap}
-.case-card{background:#020617;padding:10px;width:140px;border-radius:8px;text-align:center;cursor:pointer}
 .inventory{margin-top:20px}
-.inv-item{background:#020617;width:120px;padding:6px;border-radius:6px;text-align:center}
+.inv-item{background:#0b1220;width:130px;padding:6px;border-radius:6px;text-align:center}
 .sell-btn{background:#dc2626;border:none;color:white;width:100%;cursor:pointer}
 
-.roulette{position:relative;height:100px;overflow:hidden}
+.roulette{position:relative;height:100px;overflow:hidden;margin-top:10px}
 #rouletteWheel{display:flex}
-.roulette-item{width:80px;text-align:center;padding:25px 0;color:white;font-weight:bold}
+.roulette-item{width:80px;text-align:center;padding:25px 0;font-weight:bold}
 .red{background:#dc2626}
 .black{background:#111}
 .green{background:#16a34a}
@@ -38,8 +41,8 @@
 <body>
 
 <div class="topbar">
-  <div class="logo">CSGamble</div>
-  <div class="nav">
+  <div>CSGamble</div>
+  <div>
     <button onclick="showSection('cases')">Cases</button>
     <button onclick="showSection('roulette')">Roulette</button>
   </div>
@@ -53,22 +56,24 @@
 
 <section id="roulette" class="section hidden">
 <h2>Roulette</h2>
+
 <div class="roulette">
   <div id="rouletteWheel"></div>
   <div class="roulette-indicator"></div>
 </div>
+
 <input type="number" id="betAmount" value="5" min="1">
-<button onclick="placeBet('red')">Red</button>
-<button onclick="placeBet('black')">Black</button>
-<button onclick="placeBet('green')">Green</button>
+
+<button onclick="placeBet('red')">Red (2x)</button>
+<button onclick="placeBet('black')">Black (2x)</button>
+<button onclick="placeBet('green')">Green (14x)</button>
 </section>
 
-<section id="inventory" class="inventory">
+<section class="inventory">
 <h2>Inventory</h2>
 <div id="inventoryGrid"></div>
 </section>
 
-<!-- CASE MODAL -->
 <div id="caseModal" class="modal">
 <div class="modal-box">
 
@@ -77,14 +82,11 @@
 
 <label>Cases:
 <select id="caseCount">
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
+<option>1</option><option>2</option><option>3</option><option>4</option>
 </select>
 </label>
 
-<label style="margin-left:10px">
+<label>
 <input type="checkbox" id="instaSpin"> Insta Spin
 </label>
 
@@ -94,8 +96,6 @@
 </div>
 
 <button id="openCaseBtn">Open</button>
-
-<div id="result"></div>
 
 </div>
 </div>
