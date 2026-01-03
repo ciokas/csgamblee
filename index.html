@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSGamble</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">CSGamble</div>
+  <nav>
+    <button data-section="home">Cases</button>
+    <button data-section="roulette">Roulette</button>
+    <button data-section="inventory">Inventory</button>
+  </nav>
+  <div class="balance">€<span id="balance">1000</span></div>
+</header>
+
+<main>
+
+<section id="home" class="section active">
+  <h2>🔥 Featured Cases</h2>
+  <div class="case-grid" id="caseGrid"></div>
+</section>
+
+<section id="roulette" class="section">
+  <h2>🎡 Roulette (soon)</h2>
+</section>
+
+<section id="inventory" class="section">
+  <h2>🎒 Inventory (soon)</h2>
+</section>
+
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>
 
