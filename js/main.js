@@ -33,6 +33,25 @@ const cases = [
         img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_knife_karambit_cu_doppler_light_large.png"
       }
     ]
+  },
+  {
+    name: "Blue Case",
+    price: 15,
+    img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_m4a1_silencer_cu_howl_light_large.png",
+    skins: [
+      {
+        name: "M4A4 | Howl",
+        value: 800,
+        rarity: "legendary",
+        img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_m4a1_silencer_cu_howl_light_large.png"
+      },
+      {
+        name: "Desert Eagle | Blaze",
+        value: 150,
+        rarity: "epic",
+        img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_deagle_cu_blaze_light_large.png"
+      }
+    ]
   }
 ];
 
@@ -68,7 +87,7 @@ function loadCases() {
     const div = document.createElement("div");
     div.className = "case-card";
     div.innerHTML = `
-      <img src="${c.img}">
+      <img src="${c.img}" width="80">
       <h4>${c.name}</h4>
       <p>€${c.price}</p>
     `;
@@ -105,15 +124,11 @@ document.getElementById("openCaseBtn").onclick = () => {
   strip.style.filter = "blur(4px)";
 
   const total = 30;
-  const center = Math.floor(total / 2);
+  const center = Math.floor(total/2);
   const winSkin = selectedCase.skins[Math.floor(Math.random() * selectedCase.skins.length)];
 
-  for (let i = 0; i < total; i++) {
-    const skin =
-      i === center
-        ? winSkin
-        : selectedCase.skins[Math.floor(Math.random() * selectedCase.skins.length)];
-
+  for(let i=0;i<total;i++){
+    const skin = i===center ? winSkin : selectedCase.skins[Math.floor(Math.random()*selectedCase.skins.length)];
     const div = document.createElement("div");
     div.className = `caseItem ${skin.rarity}`;
     div.innerHTML = `
@@ -123,23 +138,21 @@ document.getElementById("openCaseBtn").onclick = () => {
     strip.appendChild(div);
   }
 
-  requestAnimationFrame(() => {
+  requestAnimationFrame(()=>{
     strip.style.transition = "transform 3.2s cubic-bezier(0.15,0.8,0.2,1)";
-    strip.style.transform = `translateX(${-(center * 110 - 200)}px)`;
+    strip.style.transform = `translateX(${-(center*110 - 200)}px)`;
   });
 
-  setTimeout(() => {
+  setTimeout(()=>{
     strip.style.filter = "blur(0)";
     inventory.push(winSkin);
     renderInventory();
 
-    document.getElementById("resultText").innerHTML =
-      `🎉 You won <b>${winSkin.name}</b> (€${winSkin.value})`;
-
+    document.getElementById("resultText").innerHTML = `🎉 You won <b>${winSkin.name}</b> (€${winSkin.value})`;
     const img = document.getElementById("resultImg");
     img.src = winSkin.img;
     img.style.display = "inline-block";
-  }, 3300);
+  },3300);
 };
 
 /* =======================
@@ -153,7 +166,7 @@ function renderInventory() {
     const div = document.createElement("div");
     div.className = `inv-item ${item.rarity}`;
     div.innerHTML = `
-      <img src="${item.img}">
+      <img src="${item.img}" width="60">
       <p>${item.name}</p>
       <span>€${item.value}</span>
     `;
@@ -166,10 +179,7 @@ function renderInventory() {
 ======================= */
 function placeBet(color) {
   const bet = Number(document.getElementById("betAmount").value);
-  if (bet <= 0 || balance < bet) {
-    alert("Invalid bet");
-    return;
-  }
+  if(bet<=0 || balance<bet){ alert("Invalid bet"); return; }
 
   balance -= bet;
   updateBalance();
@@ -179,41 +189,38 @@ function placeBet(color) {
   wheel.style.transition = "none";
   wheel.style.transform = "translateX(0)";
 
-  const colors = ["red", "black", "black", "red", "green"];
+  const colors = ["red","black","black","red","green"];
   const segments = [];
 
-  for (let i = 0; i < 50; i++) {
-    const c = colors[Math.floor(Math.random() * colors.length)];
+  for(let i=0;i<50;i++){
+    const c = colors[Math.floor(Math.random()*colors.length)];
     segments.push(c);
-
     const div = document.createElement("div");
     div.className = `roulette-item ${c}`;
     div.innerText = c.toUpperCase();
     wheel.appendChild(div);
   }
 
-  const winIndex = Math.floor(Math.random() * segments.length);
-  const offset = winIndex * 80 - 200;
+  const winIndex = Math.floor(Math.random()*segments.length);
+  const offset = winIndex*80 - wheel.offsetWidth/2 + 40;
 
-  requestAnimationFrame(() => {
+  requestAnimationFrame(()=>{
     wheel.style.transition = "transform 3.2s cubic-bezier(0.15,0.8,0.2,1)";
     wheel.style.transform = `translateX(-${offset}px)`;
   });
 
-  setTimeout(() => {
+  setTimeout(()=>{
     const result = segments[winIndex];
     let winAmount = 0;
-
-    if (result === color) {
-      winAmount = color === "green" ? bet * 14 : bet * 2;
-      balance += winAmount;
-    }
-
+    if(result===color) winAmount = color==="green"? bet*14 : bet*2;
+    balance += winAmount;
     updateBalance();
-    alert(
-      winAmount > 0
-        ? `You won €${winAmount}! (${result})`
-        : `You lost! Result: ${result}`
-    );
-  }, 3300);
+
+    // leave wheel in final position
+    wheel.style.transition = "none";
+    wheel.style.transform = `translateX(-${offset}px)`;
+
+    alert(winAmount>0 ? `You won €${winAmount}! (${result})` : `You lost! Result: ${result}`);
+  },3300);
 }
+
