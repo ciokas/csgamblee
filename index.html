@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="css/animations.css">
 
   <style>
-    /* papildomas CSS tik pagrindui, modal ir hidden */
     .hidden { display: none; }
 
     .modal {
@@ -65,8 +64,9 @@
     /* roulette */
     #rouletteWheel {
       display: flex;
-      transition: transform 3s cubic-bezier(0.15,0.8,0.2,1);
       overflow: hidden;
+      width: 600px;
+      transition: transform 3s cubic-bezier(0.15,0.8,0.2,1);
     }
 
     .roulette-item {
@@ -93,6 +93,7 @@
     .case-grid { display:flex; flex-wrap:wrap; gap:15px; margin-top:15px; }
     .case-card { width:120px; background:#111; padding:10px; border-radius:8px; text-align:center; cursor:pointer; transition:0.2s; }
     .case-card:hover { transform:scale(1.05); }
+
     .inventory { margin-top:20px; }
     #inventoryGrid { display:flex; flex-wrap:wrap; gap:10px; }
     .inv-item { width:80px; background:#111; padding:5px; border-radius:6px; text-align:center; }
@@ -149,7 +150,7 @@
 
     <div id="result">
       <p id="resultText"></p>
-      <img id="resultImg" style="display:none">
+      <img id="resultImg">
     </div>
   </div>
 </div>
@@ -157,5 +158,3 @@
 <script src="js/main.js"></script>
 </body>
 </html>
-
-
