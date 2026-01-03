@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CSGamble</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>CSGamble</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
+<style>
+/* Pagrindinis stilius */
+body { background:#121212; color:white; font-family:sans-serif; margin:0; padding:0; }
+.topbar { display:flex; justify-content:space-between; padding:10px 20px; background:#111; align-items:center; }
+.topbar .nav button { margin-left:10px; }
+.balance { font-weight:bold; }
+.section { padding:15px; }
+.hidden { display:none; }
+.case-grid, #inventoryGrid { display:flex; flex-wrap:wrap; gap:10px; }
+.case-card, .inv-item { background:#111; padding:10px; border-radius:8px; text-align:center; cursor:pointer; transition:0.2s; }
+.case-card:hover { transform:scale(1.05); }
+.modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; }
+.modal-box { background:#111; padding:20px; border-radius:10px; max-width:600px; width:90%; text-align:center; }
+.spinner { position:relative; overflow:hidden; height:120px; margin:10px 0; background:#020617; }
+#caseStrip { display:flex; }
+.caseItem { width:100px; margin:0 5px; text-align:center; flex-shrink:0; }
+.indicator { position:absolute; top:0; bottom:0; width:2px; background:red; left:50%; }
+#resultImg { display:none; max-width:100px; margin-top:10px; }
+#rouletteWheel { display:flex; transition:transform 3s cubic-bezier(0.15,0.8,0.2,1); overflow:hidden; }
+.roulette-item { width:80px; text-align:center; padding:25px 0; font-weight:bold; }
+.red { background:#dc2626; } .black { background:#111; } .green { background:#16a34a; }
+.roulette-indicator { position:absolute; top:0; bottom:0; width:4px; background:yellow; left:50%; }
+</style>
 </head>
 <body>
 
@@ -15,85 +38,46 @@
   <div class="nav">
     <button onclick="showSection('cases')">Cases</button>
     <button onclick="showSection('roulette')">Roulette</button>
-    <button onclick="showSection('caseBattle')">Case Battle</button>
     <button onclick="showSection('inventory')">Inventory</button>
-    <button onclick="showSection('minigames')">Mini Games</button>
-    <button onclick="showSection('profile')">Profile</button>
   </div>
   <div class="balance">Balance: €100.00</div>
 </div>
 
-<!-- CASES -->
-<section id="cases" class="section">
-  <h2>Cases</h2>
-  <div id="caseGrid" class="case-grid"></div>
-  <div>
-    <label for="multiOpen">Open # of cases:</label>
-    <select id="multiOpen">
-      <option value="1" selected>1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-    </select>
-    <button id="instaSpinBtn">Insta Spin</button>
-  </div>
-</section>
-
-<!-- CASE MODAL -->
-<div id="caseModal" class="modal">
-  <div class="modal-box">
-    <h3 id="caseTitle"></h3>
-
-    <div class="spinner-container" id="spinnerContainer"></div>
-
-    <button id="closeCaseModalBtn">Exit</button>
-  </div>
-</div>
-
-<!-- ROULETTE -->
+<section id="cases" class="section"></section>
 <section id="roulette" class="section hidden">
   <h2>Roulette</h2>
   <div class="roulette" style="position:relative; height:100px; overflow:hidden;">
     <div id="rouletteWheel"></div>
     <div class="roulette-indicator"></div>
   </div>
-  <div class="roulette-controls">
-    <input type="number" id="betAmount" value="5" min="1">
+  <div class="roulette-controls" style="margin-top:15px;">
+    <input type="number" id="betAmount" value="5" min="1" style="width:60px;">
     <button onclick="placeBet('red')">Red (2x)</button>
     <button onclick="placeBet('black')">Black (2x)</button>
     <button onclick="placeBet('green')">Green (14x)</button>
   </div>
 </section>
-
-<!-- CASE BATTLE -->
-<section id="caseBattle" class="section hidden">
-  <h2>Case Battle</h2>
-  <button id="startBattleBtn">Start Battle</button>
-  <div id="battleLog"></div>
-</section>
-
-<!-- INVENTORY -->
-<section id="inventory" class="section hidden">
+<section id="inventory" class="inventory hidden">
   <h2>Inventory</h2>
   <div id="inventoryGrid"></div>
-  <button id="sellAllBtn">Sell All Skins</button>
 </section>
 
-<!-- MINI GAMES -->
-<section id="minigames" class="section hidden">
-  <h2>Mini Games</h2>
-  <button onclick="startTower()">Tower</button>
-  <button onclick="startMines()">Mines</button>
-  <button onclick="startCrash()">Crash</button>
-</section>
-
-<!-- PROFILE -->
-<section id="profile" class="section hidden">
-  <h2>Profile</h2>
-  <div>XP: <span id="xpCount">0</span></div>
-  <div>Level: <span id="levelCount">1</span></div>
-  <div id="playerNick">Nick: Player</div>
-</section>
+<!-- CASE MODAL -->
+<div id="caseModal" class="modal">
+  <div class="modal-box">
+    <h3 id="caseTitle"></h3>
+    <div class="spinner">
+      <div id="caseStrip"></div>
+      <div class="indicator"></div>
+    </div>
+    <button id="openCaseBtn">Open Case</button>
+    <button id="closeCaseBtn">Exit</button>
+    <div id="result">
+      <p id="resultText"></p>
+      <img id="resultImg">
+    </div>
+  </div>
+</div>
 
 <script src="js/main.js"></script>
 </body>
