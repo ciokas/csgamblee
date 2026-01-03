@@ -6,8 +6,7 @@ let inventory = [];
 let selectedCase = null;
 
 /* =======================
-   CASE DATA
-   (nuotraukos įkelti į assets/img/)
+   CASE DATA (nuotraukos įkelti į assets/img/)
 ======================= */
 const cases = [
   {
@@ -136,7 +135,6 @@ document.getElementById("openCaseBtn").onclick = () => {
 function renderInventory() {
   const inv = document.getElementById("inventoryGrid");
   inv.innerHTML = "";
-
   inventory.forEach(item => {
     const div = document.createElement("div");
     div.className = `inv-item ${item.rarity}`;
@@ -154,10 +152,7 @@ function renderInventory() {
 ======================= */
 function placeBet(color) {
   const bet = Number(document.getElementById("betAmount").value);
-  if (bet <= 0 || balance < bet) {
-    alert("Invalid bet");
-    return;
-  }
+  if (bet <= 0 || balance < bet) { alert("Invalid bet"); return; }
 
   balance -= bet;
   updateBalance();
@@ -173,7 +168,6 @@ function placeBet(color) {
   for (let i = 0; i < 50; i++) {
     const c = colors[Math.floor(Math.random() * colors.length)];
     segments.push(c);
-
     const div = document.createElement("div");
     div.className = `roulette-item ${c}`;
     div.innerText = c.toUpperCase();
@@ -201,4 +195,3 @@ function placeBet(color) {
     alert(winAmount > 0 ? `You won €${winAmount}! (${result})` : `You lost! Result: ${result}`);
   }, 3300);
 }
-
