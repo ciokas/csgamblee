@@ -1,1 +1,9 @@
+@keyframes glow {
+  from { box-shadow: 0 0 10px #22c55e; }
+  to { box-shadow: 0 0 30px #22c55e; }
+}
+
+.legendary {
+  animation: glow 1.5s infinite alternate;
+}
 
