@@ -46,19 +46,25 @@
 <p id="minesStatus"></p>
     <hr>
 
-<h2>⚔️ Case Battle (1v1 vs Bot)</h2>
+<hr>
 
-<button onclick="startCaseBattle()">Pradėti Battle</button>
+<h2>⚔️ Case Battle (Animated)</h2>
+
+<button onclick="startAnimatedBattle()">Pradėti Battle</button>
 
 <div class="battle">
     <div>
         <h3>Tu</h3>
-        <div id="playerBattle"></div>
+        <div class="roller">
+            <div id="playerRoll" class="roll-track"></div>
+        </div>
     </div>
 
     <div>
         <h3>Bot</h3>
-        <div id="botBattle"></div>
+        <div class="roller">
+            <div id="botRoll" class="roll-track"></div>
+        </div>
     </div>
 </div>
 
