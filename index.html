@@ -1,125 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CSGamble DEMO</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>CSGamble</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
+<style>
+body{margin:0;background:#020617;color:#fff;font-family:Arial}
+.hidden{display:none}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:#020617;border-bottom:1px solid #111}
+button{background:#2563eb;border:none;color:#fff;padding:8px 12px;border-radius:6px;cursor:pointer}
+button:hover{opacity:.9}
+.section{padding:20px}
 
-  <style>
-    body { background:#0b0b0f; color:white; font-family:sans-serif; margin:0; padding:0; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; background:#111; padding:10px; }
-    .nav button { margin-right:10px; }
-    .balance { font-weight:bold; }
+.case-grid{display:flex;gap:15px;flex-wrap:wrap}
+.case-card{width:140px;background:#020617;border:1px solid #111;border-radius:8px;padding:10px;text-align:center;cursor:pointer}
+.case-card img{width:80px}
 
-    .hidden { display:none; }
-    .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; justify-content:center; align-items:center; background: rgba(0,0,0,0.7); z-index:999; }
-    .modal-box { background:#111; padding:20px; border-radius:10px; text-align:center; max-width:700px; width:90%; }
-    #resultImg { display:none; max-width:100px; margin-top:10px; }
+.modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.8)}
+.modal-box{background:#020617;padding:20px;border-radius:10px;width:95%;max-width:900px}
 
-    .spinner { position: relative; overflow: hidden; height: 120px; margin: 15px 0; background: #020617; }
-    #caseStrip { display: flex; }
-    .caseItem { width: 100px; margin: 0 5px; text-align: center; background: #020617; flex-shrink: 0; }
-    .indicator { position:absolute; top:0; bottom:0; width:2px; background:red; left:50%; }
+.spinner{position:relative;overflow:hidden;height:130px;border:1px solid #111}
+.strip{display:flex}
+.item{width:110px;text-align:center;flex-shrink:0}
+.item img{width:60px}
 
-    #rouletteWheel { display:flex; overflow:hidden; }
-    .roulette-item { width:80px; text-align:center; padding:25px 0; font-weight:bold; color:white; }
-    .red { background:#dc2626; }
-    .black { background:#111; }
-    .green { background:#16a34a; }
+.indicator{position:absolute;top:0;bottom:0;width:3px;background:red;left:50%}
 
-    .roulette-indicator { position:absolute; top:0; bottom:0; width:4px; background:yellow; left:50%; }
+.legendary{color:#facc15}
+.epic{color:#a855f7}
+.rare{color:#60a5fa}
 
-    .case-grid { display:flex; flex-wrap:wrap; gap:15px; margin-top:15px; }
-    .case-card { width:120px; background:#111; padding:10px; border-radius:8px; text-align:center; cursor:pointer; transition:0.2s; }
-    .case-card:hover { transform:scale(1.05); }
-    .inventory { margin-top:20px; }
-    #inventoryGrid { display:flex; flex-wrap:wrap; gap:10px; }
-    .inv-item { width:80px; background:#111; padding:5px; border-radius:6px; text-align:center; }
+.inventory{display:flex;gap:10px;flex-wrap:wrap}
+.inv-item{width:90px;border:1px solid #111;padding:5px;text-align:center}
 
-    /* Case Battle */
-    .battle-modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; justify-content:center; align-items:center; background:rgba(0,0,0,0.9); z-index:1000; }
-    .battle-box { background:#111; padding:20px; border-radius:10px; width:90%; max-width:800px; text-align:center; }
-    .battle-strip { display:flex; justify-content:space-around; margin:10px 0; overflow-x:auto; }
-    .battle-player { flex:1; text-align:center; }
-  </style>
+.roulette{position:relative;height:100px;overflow:hidden;border:1px solid #111}
+#wheel{display:flex}
+.roulette-item{width:80px;text-align:center;padding:30px 0;font-weight:bold}
+.red{background:#dc2626}
+.black{background:#111}
+.green{background:#16a34a}
+</style>
 </head>
+
 <body>
 
 <div class="topbar">
-  <div class="logo">CSGamble DEMO</div>
-  <div class="nav">
-    <button onclick="showSection('cases')">Cases</button>
-    <button onclick="showSection('roulette')">Roulette</button>
-    <button onclick="showSection('minigames')">Minigames</button>
-    <button onclick="showSection('inventory')">Inventory</button>
+  <b>CSGamble</b>
+  <div>
+    <button onclick="show('cases')">Cases</button>
+    <button onclick="show('battle')">Case Battle</button>
+    <button onclick="show('roulette')">Roulette</button>
   </div>
-  <div class="balance">Balance: €0.00</div>
+  <div id="balance">€100</div>
 </div>
 
+<!-- CASES -->
 <section id="cases" class="section">
-  <h2>Cases</h2>
-  <div id="caseGrid" class="case-grid"></div>
-  <div>
-    <label>Number of Cases: <input type="number" id="caseCount" value="1" min="1" max="4" style="width:50px;"></label>
-    <button id="instaSpinBtn">Insta Spin: OFF</button>
-  </div>
+<h2>Cases</h2>
+<div id="caseGrid" class="case-grid"></div>
 </section>
 
+<!-- CASE BATTLE -->
+<section id="battle" class="section hidden">
+<h2>Case Battle vs BOT</h2>
+<button onclick="startBattle()">Start Battle</button>
+<div id="battleLog"></div>
+</section>
+
+<!-- ROULETTE -->
 <section id="roulette" class="section hidden">
-  <h2>Roulette</h2>
-  <div class="roulette" style="position:relative; height:100px; overflow:hidden;">
-    <div id="rouletteWheel"></div>
-    <div class="roulette-indicator"></div>
-  </div>
-  <div class="roulette-controls" style="margin-top:15px;">
-    <input type="number" id="betAmount" value="5" min="1" style="width:60px;">
-    <button onclick="placeBet('red')">Red (2x)</button>
-    <button onclick="placeBet('black')">Black (2x)</button>
-    <button onclick="placeBet('green')">Green (14x)</button>
-  </div>
+<h2>Roulette</h2>
+<div class="roulette">
+  <div id="wheel"></div>
+  <div class="indicator"></div>
+</div>
+<br>
+<input id="bet" type="number" value="5">
+<button onclick="spin('red')">Red x2</button>
+<button onclick="spin('black')">Black x2</button>
+<button onclick="spin('green')">Green x14</button>
 </section>
 
-<section id="minigames" class="section hidden">
-  <h2>Minigames</h2>
-  <p>Coming soon...</p>
-</section>
-
-<section id="inventory" class="inventory hidden">
-  <h2>Inventory</h2>
-  <div id="inventoryGrid"></div>
+<!-- INVENTORY -->
+<section class="section">
+<h2>Inventory</h2>
+<div id="inv" class="inventory"></div>
 </section>
 
 <!-- CASE MODAL -->
 <div id="caseModal" class="modal">
-  <div class="modal-box">
-    <h3 id="caseTitle"></h3>
-    <div class="spinner">
-      <div id="caseStrip"></div>
-      <div class="indicator"></div>
-    </div>
-    <button id="openCaseBtn">Open Case</button>
-    <button id="exitCaseBtn">Exit Case</button>
-    <div id="result">
-      <p id="resultText"></p>
-      <img id="resultImg">
-    </div>
-  </div>
+<div class="modal-box">
+<h3 id="caseTitle"></h3>
+<div class="spinner">
+  <div id="strip" class="strip"></div>
+  <div class="indicator"></div>
 </div>
-
-<!-- CASE BATTLE MODAL -->
-<div id="battleModal" class="battle-modal">
-  <div class="battle-box">
-    <h3>Case Battle</h3>
-    <div class="battle-strip">
-      <div class="battle-player" id="battlePlayer"></div>
-      <div class="battle-player" id="battleEnemy"></div>
-    </div>
-    <button onclick="startCaseBattle()">Start Battle</button>
-    <p id="battleResult"></p>
-  </div>
+<br>
+<button onclick="openCase()">Open Case</button>
+<button onclick="closeModal()">Exit</button>
+<div id="result"></div>
+</div>
 </div>
 
 <script src="js/main.js"></script>
