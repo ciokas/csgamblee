@@ -1,111 +1,100 @@
+/* ===== SKINS ===== */
 const skins = [
-    { name: "AK-47 | Redline", img: "images/ak47_redline.png", chance: 30 },
-    { name: "AWP | Asiimov", img: "images/awp_asiimov.png", chance: 20 },
-    { name: "Desert Eagle | Blaze", img: "images/deagle_blaze.png", chance: 20 },
-    { name: "M4A4 | Howl", img: "images/m4a4_howl.png", chance: 15 },
-    { name: "Karambit | Doppler", img: "images/karambit_doppler.png", chance: 5 }
+    { name: "AK-47 | Redline", img: "images/ak47_redline.png", chance: 30, value: 15 },
+    { name: "AWP | Asiimov", img: "images/awp_asiimov.png", chance: 20, value: 25 },
+    { name: "Desert Eagle | Blaze", img: "images/deagle_blaze.png", chance: 20, value: 20 },
+    { name: "M4A4 | Howl", img: "images/m4a4_howl.png", chance: 15, value: 40 },
+    { name: "Karambit | Doppler", img: "images/karambit_doppler.png", chance: 5, value: 80 }
 ];
 
 let inventory = [];
 
+/* ===== RNG ===== */
 function getRandomSkin() {
     let rand = Math.random() * 100;
-    let cumulative = 0;
-
-    for (let skin of skins) {
-        cumulative += skin.chance;
-        if (rand <= cumulative) return skin;
+    let total = 0;
+    for (let s of skins) {
+        total += s.chance;
+        if (rand <= total) return s;
     }
 }
 
+/* ===== CASE OPEN ===== */
 function openCase() {
     const skin = getRandomSkin();
     inventory.push(skin);
 
-    document.getElementById("result").innerHTML = `
+    document.getElementById("caseResult").innerHTML = `
         <div class="item">
             <img src="${skin.img}">
             <p>${skin.name}</p>
         </div>
     `;
-
     renderInventory();
 }
 
 function renderInventory() {
     const inv = document.getElementById("inventory");
     inv.innerHTML = "";
-
-    inventory.forEach(skin => {
+    inventory.forEach(s => {
         inv.innerHTML += `
             <div class="item">
-                <img src="${skin.img}">
-                <p>${skin.name}</p>
+                <img src="${s.img}">
+                <small>${s.name}</small>
             </div>
         `;
     });
 }
 
-function playRoulette() {
-    const win = Math.random() < 0.45 ? "WIN" : "LOSE";
-    document.getElementById("rouletteResult").innerText =
-        win === "WIN" ? "🟢 Laimėjai!" : "🔴 Pralaimėjai!";
-    let mines = [];
-let revealed = [];
-let gameActive = false;
-let multiplier = 1;
+/* ===== MINES ===== */
+let mines = [], revealed = [], gameActive = false, multiplier = 1;
 
 function startMines() {
-    const bombCount = parseInt(document.getElementById("bombCount").value);
     mines = [];
     revealed = [];
-    gameActive = true;
     multiplier = 1;
+    gameActive = true;
 
     document.getElementById("multiplier").innerText = "1.00x";
     document.getElementById("minesStatus").innerText = "";
 
-    // sugeneruojam minas
-    while (mines.length < bombCount) {
+    let count = parseInt(document.getElementById("bombCount").value);
+    while (mines.length < count) {
         let r = Math.floor(Math.random() * 25);
         if (!mines.includes(r)) mines.push(r);
     }
-
     renderGrid();
 }
 
 function renderGrid() {
-    const grid = document.getElementById("minesGrid");
-    grid.innerHTML = "";
-
+    const g = document.getElementById("minesGrid");
+    g.innerHTML = "";
     for (let i = 0; i < 25; i++) {
-        const cell = document.createElement("div");
-        cell.className = "cell";
-        cell.onclick = () => clickCell(i, cell);
-        grid.appendChild(cell);
+        const c = document.createElement("div");
+        c.className = "cell";
+        c.onclick = () => clickCell(i, c);
+        g.appendChild(c);
     }
 }
 
-function clickCell(index, cell) {
-    if (!gameActive || revealed.includes(index)) return;
-
-    if (mines.includes(index)) {
-        cell.innerText = "💣";
-        cell.classList.add("bomb");
-        document.getElementById("minesStatus").innerText = "💥 Pralaimėjai!";
+function clickCell(i, c) {
+    if (!gameActive || revealed.includes(i)) return;
+    if (mines.includes(i)) {
+        c.innerText = "💣";
         gameActive = false;
+        document.getElementById("minesStatus").innerText = "💥 Pralaimėjai";
         revealAll();
     } else {
-        cell.innerText = "💎";
-        revealed.push(index);
+        c.innerText = "💎";
+        revealed.push(i);
         multiplier += 0.2;
         document.getElementById("multiplier").innerText = multiplier.toFixed(2) + "x";
     }
 }
 
 function revealAll() {
-    document.querySelectorAll(".cell").forEach((cell, i) => {
-        if (mines.includes(i)) cell.innerText = "💣";
+    document.querySelectorAll(".cell").forEach((c, i) => {
+        if (mines.includes(i)) c.innerText = "💣";
     });
 }
 
@@ -115,55 +104,42 @@ function cashoutMines() {
     document.getElementById("minesStatus").innerText =
         "💰 Cashout: " + multiplier.toFixed(2) + "x";
     revealAll();
-    
 }
-    const skins = [
-    { name: "AK-47 | Redline", img: "images/ak47_redline.png", chance: 30, value: 15 },
-    { name: "AWP | Asiimov", img: "images/awp_asiimov.png", chance: 20, value: 25 },
-    { name: "Desert Eagle | Blaze", img: "images/deagle_blaze.png", chance: 20, value: 20 },
-    { name: "M4A4 | Howl", img: "images/m4a4_howl.png", chance: 15, value: 40 },
-    { name: "Karambit | Doppler", img: "images/karambit_doppler.png", chance: 5, value: 80 }
-];
-    function startCaseBattle() {
-    const playerSkin = getRandomSkin();
-    const botSkin = getRandomSkin();
 
-    document.getElementById("playerBattle").innerHTML = battleItem(playerSkin);
-    document.getElementById("botBattle").innerHTML = battleItem(botSkin);
+/* ===== CASE BATTLE ===== */
+function rollItem(s) {
+    return `<div class="roll-item"><img src="${s.img}"></div>`;
+}
 
-    let result = "";
+function startAnimatedBattle() {
+    const pRoll = document.getElementById("playerRoll");
+    const bRoll = document.getElementById("botRoll");
+    pRoll.innerHTML = "";
+    bRoll.innerHTML = "";
 
-    if (playerSkin.value > botSkin.value) {
-        result = "🏆 TU LAIMĖJAI!";
-        inventory.push(playerSkin);
-    } else if (playerSkin.value < botSkin.value) {
-        result = "🤖 BOTAS LAIMĖJO!";
-    } else {
-        result = "🤝 LYGIŲJŲ!";
+    const pFinal = getRandomSkin();
+    const bFinal = getRandomSkin();
+
+    for (let i = 0; i < 25; i++) {
+        pRoll.innerHTML += rollItem(getRandomSkin());
+        bRoll.innerHTML += rollItem(getRandomSkin());
     }
 
-    document.getElementById("battleResult").innerText = result;
-    renderInventory();
-}
+    pRoll.innerHTML += rollItem(pFinal);
+    bRoll.innerHTML += rollItem(bFinal);
 
-function battleItem(skin) {
-    return `
-        <div class="item">
-            <img src="${skin.img}">
-            <p>${skin.name}</p>
-            <small>Value: ${skin.value}</small>
-        </div>
-    `;
-}
-function rollItem(skin) {
-    return `
-        <div class="roll-item">
-            <img src="${skin.img}">
-            <small>${skin.name}</small>
-        </div>
-    `;
-}
+    pRoll.style.transform = "translateX(-3000px)";
+    bRoll.style.transform = "translateX(-3000px)";
 
-
-
+    setTimeout(() => {
+        let res = "🤝 Lygiosios";
+        if (pFinal.value > bFinal.value) {
+            res = "🏆 TU LAIMĖJAI!";
+            inventory.push(pFinal);
+        } else if (pFinal.value < bFinal.value) {
+            res = "🤖 BOTAS LAIMĖJO!";
+        }
+        document.getElementById("battleResult").innerText = res;
+        renderInventory();
+    }, 2600);
 }
