@@ -155,6 +155,14 @@ function battleItem(skin) {
         </div>
     `;
 }
+function rollItem(skin) {
+    return `
+        <div class="roll-item">
+            <img src="${skin.img}">
+            <small>${skin.name}</small>
+        </div>
+    `;
+}
 
 
 
