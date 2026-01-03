@@ -1,146 +1,25 @@
 body {
-  margin: 0;
-  background: #0f172a;
-  color: white;
-  font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    font-family: Arial;
+    text-align: center;
 }
 
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 25px;
-  background: #020617;
-  align-items: center;
+button {
+    padding: 10px 20px;
+    background: #22c55e;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
 }
 
-.logo {
-  font-weight: bold;
-  font-size: 20px;
+.item {
+    display: inline-block;
+    background: #1e293b;
+    padding: 10px;
+    margin: 5px;
 }
 
-.nav button {
-  margin: 0 5px;
+.item img {
+    width: 100px;
 }
-
-.balance {
-  color: #22c55e;
-}
-
-.section {
-  padding: 25px;
-}
-
-.hidden {
-  display: none;
-}
-
-.case-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 15px;
-}
-
-.case-card {
-  background: #020617;
-  padding: 15px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.case-card img {
-  width: 100px;
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.7);
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
-  background: #020617;
-  padding: 20px;
-  width: 420px;
-  text-align: center;
-}
-
-.spinner {
-  position: relative;
-  overflow: hidden;
-  height: 120px;
-  margin: 15px 0;
-}
-
-#caseStrip {
-  display: flex;
-}
-
-.caseItem {
-  width: 100px;
-  margin: 0 5px;
-  background: #020617;
-}
-
-.indicator {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: red;
-  left: 50%;
-}
-
-.inventory {
-  padding: 25px;
-}
-
-#inventoryGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-}
-
-.inv-item {
-  background: #020617;
-  padding: 10px;
-  text-align: center;
-}
-
-.inv-item img {
-  width: 80px;
-}
-
-.roulette {
-  position: relative;
-  overflow: hidden;
-  height: 80px;
-  background: #020617;
-  margin: 20px 0;
-}
-
-#rouletteWheel {
-  display: flex;
-}
-
-.roulette-item {
-  width: 80px;
-  text-align: center;
-  padding: 25px 0;
-}
-
-.red { background: #dc2626; }
-.black { background: #020617; }
-.green { background: #16a34a; }
-
-.roulette-indicator {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: yellow;
-  left: 50%;
-}
-
