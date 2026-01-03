@@ -1,93 +1,92 @@
-document.addEventListener("DOMContentLoaded", () => {
+let balance = 100;
+let inventory = [];
+let selectedCase = null;
 
-  // NAV
-  const sections = document.querySelectorAll(".section");
-  document.querySelectorAll("[data-section]").forEach(btn => {
-    btn.onclick = () => {
-      sections.forEach(s => s.classList.remove("active"));
-      document.getElementById(btn.dataset.section).classList.add("active");
-    };
-  });
+const cases = [
+  {
+    name: "Starter Case",
+    price: 5,
+    img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_ak47_cu_redline_light_large.png",
+    skins: [
+      { name: "AK-47 Redline", value: 25, rarity: "rare", img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_ak47_cu_redline_light_large.png" },
+      { name: "AWP Asiimov", value: 60, rarity: "epic", img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_awp_cu_asiimov_light_large.png" },
+      { name: "Karambit Doppler", value: 950, rarity: "legendary", img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_knife_karambit_cu_doppler_light_large.png" }
+    ]
+  }
+];
 
-  // CASE DATA
-  const cases = [
-    {
-      name: "Redline Case",
-      price: 0.50,
-      img: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_ak47_cu_redline_light_large.6e0c0f5b1c.png",
-      skins: [
-        {name:"AK-47 | Redline", rarity:"common", img:"https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_ak47_cu_redline_light_large.6e0c0f5b1c.png", value:25},
-        {name:"AWP | Asiimov", rarity:"rare", img:"https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_awp_cu_asiimov_light_large.5f2a6f52ef.png", value:60},
-        {name:"★ Karambit | Doppler", rarity:"legendary", img:"https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_karambit_cu_doppler_light_large.0c1e21f6d3.png", value:950}
-      ]
-    }
-  ];
+function updateBalance() {
+  document.querySelector(".balance").innerText = `Balance: €${balance.toFixed(2)}`;
+}
 
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(s => s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function loadCases() {
   const grid = document.getElementById("caseGrid");
-  const modal = document.getElementById("caseModal");
-  const strip = document.getElementById("caseStrip");
-  const title = document.getElementById("caseTitle");
-
   cases.forEach(c => {
     const div = document.createElement("div");
     div.className = "case-card";
-    div.innerHTML = `
-      <img src="${c.img}">
-      <h4>${c.name}</h4>
-      <div class="case-price">€${c.price}</div>
-    `;
+    div.innerHTML = `<img src="${c.img}"><h4>${c.name}</h4><p>€${c.price}</p>`;
     div.onclick = () => openCase(c);
     grid.appendChild(div);
   });
+}
 
-  let currentCase;
+function openCase(c) {
+  selectedCase = c;
+  document.getElementById("caseModal").style.display = "flex";
+  document.getElementById("caseTitle").innerText = c.name;
+}
 
-  function openCase(c) {
-    currentCase = c;
-    title.innerText = c.name;
-    modal.classList.add("active");
-    strip.innerHTML = "";
-    document.getElementById("resultImg").style.display = "none";
-    document.getElementById("resultText").innerText = "";
+document.getElementById("openCaseBtn").onclick = () => {
+  if (balance < selectedCase.price) return alert("Not enough balance");
+  balance -= selectedCase.price;
+  updateBalance();
+
+  const win = selectedCase.skins[Math.floor(Math.random() * selectedCase.skins.length)];
+  inventory.push(win);
+  renderInventory();
+
+  document.getElementById("resultText").innerText = win.name + " (€" + win.value + ")";
+  document.getElementById("resultImg").src = win.img;
+};
+
+function renderInventory() {
+  const inv = document.getElementById("inventoryGrid");
+  inv.innerHTML = "";
+  inventory.forEach(i => {
+    inv.innerHTML += `
+      <div class="inv-item ${i.rarity}">
+        <img src="${i.img}">
+        <p>${i.name}</p>
+        <span>€${i.value}</span>
+      </div>`;
+  });
+}
+
+/* ROULETTE */
+function placeBet(color) {
+  const bet = Number(document.getElementById("betAmount").value);
+  if (balance < bet) return alert("No money");
+
+  balance -= bet;
+  updateBalance();
+
+  const colors = ["red", "black", "black", "red", "green"];
+  const result = colors[Math.floor(Math.random() * colors.length)];
+
+  if (result === color) {
+    balance += color === "green" ? bet * 14 : bet * 2;
+    updateBalance();
+    alert("You won: " + result);
+  } else {
+    alert("You lost: " + result);
   }
+}
 
-  document.getElementById("openCaseBtn").onclick = () => {
-    strip.innerHTML = "";
-    strip.style.transition = "none";
-    strip.style.transform = "translateX(0)";
-    strip.style.filter = "blur(3px)";
-
-    const total = 30;
-    const center = Math.floor(total / 2);
-    const win = currentCase.skins[Math.floor(Math.random() * currentCase.skins.length)];
-
-    for (let i = 0; i < total; i++) {
-      const skin = i === center ? win :
-        currentCase.skins[Math.floor(Math.random() * currentCase.skins.length)];
-
-      const div = document.createElement("div");
-      div.className = `caseItem ${skin.rarity}`;
-      div.innerHTML = `<img src="${skin.img}"><br>${skin.name}`;
-      strip.appendChild(div);
-    }
-
-    requestAnimationFrame(() => {
-      strip.style.transition = "transform 3.2s cubic-bezier(0.15,0.8,0.2,1)";
-      strip.style.transform = `translateX(${-(center * 110 - 260)}px)`;
-    });
-
-    setTimeout(() => {
-      strip.style.filter = "blur(0)";
-      document.getElementById("resultText").innerHTML =
-        `🎉 You won <b style="color:#22c55e">${win.name}</b> (€${win.value})`;
-      const img = document.getElementById("resultImg");
-      img.src = win.img;
-      img.style.display = "block";
-    }, 3300);
-  };
-
-  modal.onclick = e => {
-    if (e.target === modal) modal.classList.remove("active");
-  };
-
-});
+updateBalance();
+loadCases();
+showSection("cases");
