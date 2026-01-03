@@ -6,7 +6,7 @@ let inventory = [];
 let selectedCase = null;
 
 /* =======================
-   CASE DATA (nuotraukos įkelti į assets/img/)
+   CASE DATA
 ======================= */
 const cases = [
   {
@@ -57,6 +57,7 @@ function showSection(id) {
 function loadCases() {
   const grid = document.getElementById("caseGrid");
   grid.innerHTML = "";
+
   cases.forEach(c => {
     const div = document.createElement("div");
     div.className = "case-card";
@@ -135,6 +136,7 @@ document.getElementById("openCaseBtn").onclick = () => {
 function renderInventory() {
   const inv = document.getElementById("inventoryGrid");
   inv.innerHTML = "";
+
   inventory.forEach(item => {
     const div = document.createElement("div");
     div.className = `inv-item ${item.rarity}`;
@@ -152,7 +154,10 @@ function renderInventory() {
 ======================= */
 function placeBet(color) {
   const bet = Number(document.getElementById("betAmount").value);
-  if (bet <= 0 || balance < bet) { alert("Invalid bet"); return; }
+  if (bet <= 0 || balance < bet) {
+    alert("Invalid bet");
+    return;
+  }
 
   balance -= bet;
   updateBalance();
@@ -162,12 +167,13 @@ function placeBet(color) {
   wheel.style.transition = "none";
   wheel.style.transform = "translateX(0)";
 
-  const colors = ["red", "black", "black", "red", "green"];
+  const colors = ["red","black","black","red","green"];
   const segments = [];
 
   for (let i = 0; i < 50; i++) {
     const c = colors[Math.floor(Math.random() * colors.length)];
     segments.push(c);
+
     const div = document.createElement("div");
     div.className = `roulette-item ${c}`;
     div.innerText = c.toUpperCase();
